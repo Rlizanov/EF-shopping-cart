@@ -23,7 +23,7 @@ Feature: Carrito de compras
     And el usuario navega al carrito
     Then el usuario deberia ver el producto "Mouse Gamer Logitech" en el carrito
 
-  @carrito-vacio
+  @smoke @carrito-vacio
   Scenario: Verificar mensaje de carrito vacio
     Given el usuario esta en la pantalla principal
     When el usuario navega al carrito

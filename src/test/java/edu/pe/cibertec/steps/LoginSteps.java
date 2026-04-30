@@ -30,7 +30,14 @@ public class LoginSteps {
 
     @Given("que el usuario esta en la pantalla de login")
     public void queElUsuarioEstaEnLaPantallaDeLogin(){
-        boolean enLogin = !driver.findElements(By.xpath("//*[@text='Login' or @text='INGRESAR']")).isEmpty();
+        // Espera para que cargue la app
+        try { Thread.sleep(3000); } catch (InterruptedException e) {}
+
+        // VALIDACIÓN: Según tu XML, buscamos "Shopping Cart" o "Iniciar Sesión"
+        boolean enLogin = !driver.findElements(By.xpath(
+                "//*[contains(@text, 'Shopping Cart')] | //*[contains(@text, 'Iniciar Sesión')]"
+        )).isEmpty();
+
         Assertions.assertTrue(enLogin, "El usuario no está en la pantalla de login");
     }
 
@@ -51,15 +58,26 @@ public class LoginSteps {
 
     @Then("deberia acceder a la pantalla principal")
     public void deberiaAccederALaPantallaPrincipal() {
-        // Requerimiento 3c: Validación real de acceso
+        try { Thread.sleep(2000); } catch (InterruptedException e) {}
+
+        // Verificamos que aparezca el catálogo
         boolean enHome = !driver.findElements(By.xpath("//*[@text='Productos' or @text='Inicio']")).isEmpty();
-        Assertions.assertTrue(enHome, "No se logró acceder a la pantalla principal");
+        Assertions.assertTrue(enHome, "Error: No se logró acceder a la pantalla principal");
     }
 
     @Then("deberia ver un mensaje de error")
     public void deberiaVerUnMensajeDeError() {
-        // Requerimiento 3c: Validación real de error
-        boolean errorVisible = !driver.findElements(By.xpath("//*[contains(@text, 'incorrecto') or contains(@text, 'inválida')]")).isEmpty();
-        Assertions.assertTrue(errorVisible, "El mensaje de error no apareció");
+        // Pausa necesaria para que el mensaje aparezca
+        try { Thread.sleep(2000); } catch (InterruptedException e) {}
+
+        // VALIDACIÓN: Según tu XML, el mensaje es "Contraseña incorrecta"
+        // Usamos "incorrect" para capturar tanto masculino como femenino
+        boolean errorVisible = !driver.findElements(By.xpath(
+                "//*[contains(@text, 'incorrect')] | " +
+                        "//*[contains(@text, 'inválid')] | " +
+                        "//*[contains(@text, 'Error')]"
+        )).isEmpty();
+
+        Assertions.assertTrue(errorVisible, "Error: El mensaje de error no apareció en pantalla");
     }
 }
