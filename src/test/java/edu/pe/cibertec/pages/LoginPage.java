@@ -11,56 +11,38 @@ public class LoginPage {
     public LoginPage(AndroidDriver driver){
         this.driver = driver;
     }
+
     // LOCALIZADORES DE PANTALLA
     private WebElement getEmailField(){
-        return  driver.findElement(
-                AppiumBy.androidUIAutomator(
-                        "new UiSelector().className(\"android.widget.EditText\").instance(0)"
-                )
-        );
+        return driver.findElement(AppiumBy.androidUIAutomator("new UiSelector().className(\"android.widget.EditText\").instance(0)"));
     }
 
     private WebElement getPasswordField(){
-        return  driver.findElement(
-                AppiumBy.androidUIAutomator(
-                        "new UiSelector().className(\"android.widget.EditText\").instance(1)"
-                )
-        );
+        return driver.findElement(AppiumBy.androidUIAutomator("new UiSelector().className(\"android.widget.EditText\").instance(1)"));
     }
 
     private WebElement getLoginButton(){
-        return  driver.findElement(
-                AppiumBy.androidUIAutomator(
-                        "new UiSelector().className(\"android.widget.Button\").instance(1)"
-                )
-        );
+        return driver.findElement(AppiumBy.androidUIAutomator("new UiSelector().className(\"android.widget.Button\").instance(1)"));
     }
 
-    // ACCIONES DE LOS ELEMENTOS
+    // --- ACCIONES INDIVIDUALES (Para LoginSteps) ---
 
     public void enterEmail(String email){
-        getPasswordField().click();
-        getEmailField().clear();
         getEmailField().sendKeys(email);
     }
 
-    public void enterPassword(String password)
-    {
-        getPasswordField().click();
-        getPasswordField().clear();
+    public void enterPassword(String password){
         getPasswordField().sendKeys(password);
     }
 
-    public void clickLoginButton (){
+    public void clickLoginButton(){
         getLoginButton().click();
     }
 
+    // --- ACCIÓN CONSOLIDADA (Para CatalogSteps u otros) ---
     public void login(String email, String password){
         enterEmail(email);
         enterPassword(password);
         clickLoginButton();
     }
-
-
-
 }

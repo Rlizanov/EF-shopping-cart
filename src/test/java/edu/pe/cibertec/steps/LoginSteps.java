@@ -15,7 +15,7 @@ public class LoginSteps {
     private static AndroidDriver driver;
     private static LoginPage loginPage;
 
-    @Before
+    @Before("@login")
     public void setUp(){
         System.out.println("INICIANDO DRIVER y PAGE OBJECTS");
         driver = AppiumConfig.getDriver();
@@ -24,7 +24,7 @@ public class LoginSteps {
         System.out.println("LOGIN PAGE INICIADO:" + (loginPage!=null));
     }
 
-    @After
+    @After("@login")
     public void tearDown(){
         System.out.println("CERRANDO DRIVER");
         AppiumConfig.quitDriver();
