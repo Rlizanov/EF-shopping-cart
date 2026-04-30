@@ -1,4 +1,4 @@
-@catalogo
+@smoke @catalogo
 Feature: Catalogo de productos
 
   Background:

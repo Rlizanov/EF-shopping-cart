@@ -1,4 +1,4 @@
-@login
+@smoke @login
 Feature: Login en la applicacion Shopping Cart
   Como usuario de la aplicacion
   Quiero poder iniciar sesion con mis credenciales

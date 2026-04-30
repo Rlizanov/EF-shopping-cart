@@ -9,32 +9,29 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.junit.jupiter.api.Assertions;
+import org.openqa.selenium.By;
 
 public class LoginSteps {
 
-    private static AndroidDriver driver;
-    private static LoginPage loginPage;
+    private AndroidDriver driver;
+    private LoginPage loginPage;
 
     @Before("@login")
     public void setUp(){
-        System.out.println("INICIANDO DRIVER y PAGE OBJECTS");
         driver = AppiumConfig.getDriver();
         loginPage = new LoginPage(driver);
-        System.out.println("DRIVER INICIADO: " + (driver!=null));
-        System.out.println("LOGIN PAGE INICIADO:" + (loginPage!=null));
     }
 
     @After("@login")
     public void tearDown(){
-        System.out.println("CERRANDO DRIVER");
         AppiumConfig.quitDriver();
-        driver = null;
-        loginPage = null;
     }
 
     @Given("que el usuario esta en la pantalla de login")
     public void queElUsuarioEstaEnLaPantallaDeLogin(){
-        System.out.println("USUARIO EN PANTALLA LOGIN");
+        boolean enLogin = !driver.findElements(By.xpath("//*[@text='Login' or @text='INGRESAR']")).isEmpty();
+        Assertions.assertTrue(enLogin, "El usuario no está en la pantalla de login");
     }
 
     @When("ingresa el email {string}")
@@ -53,12 +50,16 @@ public class LoginSteps {
     }
 
     @Then("deberia acceder a la pantalla principal")
-    public void deberiaAccederALaPantallaPrincipal(){
-        System.out.println("VALIDANDO ACCESO PANTALLA PRINCIPAL");
+    public void deberiaAccederALaPantallaPrincipal() {
+        // Requerimiento 3c: Validación real de acceso
+        boolean enHome = !driver.findElements(By.xpath("//*[@text='Productos' or @text='Inicio']")).isEmpty();
+        Assertions.assertTrue(enHome, "No se logró acceder a la pantalla principal");
     }
 
     @Then("deberia ver un mensaje de error")
-    public void deberiaVerUnMensajeDeError(){
-        System.out.println("VALIDANDO MENSAJE DE ERROR");
+    public void deberiaVerUnMensajeDeError() {
+        // Requerimiento 3c: Validación real de error
+        boolean errorVisible = !driver.findElements(By.xpath("//*[contains(@text, 'incorrecto') or contains(@text, 'inválida')]")).isEmpty();
+        Assertions.assertTrue(errorVisible, "El mensaje de error no apareció");
     }
 }

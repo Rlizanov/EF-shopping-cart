@@ -1,4 +1,4 @@
-@logout
+@smoke @logout
 
 Feature: Cerrar sesion
 
