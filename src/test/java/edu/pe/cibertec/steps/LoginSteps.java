@@ -1,5 +1,6 @@
 package edu.pe.cibertec.steps;
 
+
 import edu.pe.cibertec.config.AppiumConfig;
 import edu.pe.cibertec.pages.LoginPage;
 import io.appium.java_client.android.AndroidDriver;
@@ -11,6 +12,10 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 public class LoginSteps {
 
@@ -33,7 +38,7 @@ public class LoginSteps {
         // Espera para que cargue la app
         try { Thread.sleep(3000); } catch (InterruptedException e) {}
 
-        // VALIDACIÓN: Según tu XML, buscamos "Shopping Cart" o "Iniciar Sesión"
+
         boolean enLogin = !driver.findElements(By.xpath(
                 "//*[contains(@text, 'Shopping Cart')] | //*[contains(@text, 'Iniciar Sesión')]"
         )).isEmpty();
@@ -60,24 +65,25 @@ public class LoginSteps {
     public void deberiaAccederALaPantallaPrincipal() {
         try { Thread.sleep(2000); } catch (InterruptedException e) {}
 
-        // Verificamos que aparezca el catálogo
+
         boolean enHome = !driver.findElements(By.xpath("//*[@text='Productos' or @text='Inicio']")).isEmpty();
         Assertions.assertTrue(enHome, "Error: No se logró acceder a la pantalla principal");
     }
 
     @Then("deberia ver un mensaje de error")
     public void deberiaVerUnMensajeDeError() {
-        // Pausa necesaria para que el mensaje aparezca
-        try { Thread.sleep(2000); } catch (InterruptedException e) {}
+        var driver = edu.pe.cibertec.config.AppiumConfig.getDriver();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
 
-        // VALIDACIÓN: Según tu XML, el mensaje es "Contraseña incorrecta"
-        // Usamos "incorrect" para capturar tanto masculino como femenino
-        boolean errorVisible = !driver.findElements(By.xpath(
-                "//*[contains(@text, 'incorrect')] | " +
-                        "//*[contains(@text, 'inválid')] | " +
-                        "//*[contains(@text, 'Error')]"
-        )).isEmpty();
+        try {
 
-        Assertions.assertTrue(errorVisible, "Error: El mensaje de error no apareció en pantalla");
+            boolean estaPresente = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                    By.xpath("//android.widget.TextView[@text='Email no registrado' or @text='Contraseña incorrecta']")
+            )).isDisplayed();
+
+            Assertions.assertTrue(estaPresente, "El mensaje de error no es visible en pantalla");
+        } catch (Exception e) {
+            Assertions.fail("Error: No apareció el mensaje esperado tras 5 segundos de espera");
+        }
     }
 }

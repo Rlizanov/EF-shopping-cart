@@ -17,8 +17,10 @@ public class LogoutSteps {
         profilePage.abrirMenu();
         profilePage.verificarPantallaPerfil();
 
-        String email = profilePage.obtenerEmailLogueado();
-        Assertions.assertEquals("admin@test.com", email, "El email del perfil no coincide");
+        String emailEnPantalla = profilePage.obtenerEmailLogueado();
+
+        org.junit.jupiter.api.Assertions.assertEquals("admin@test.com", emailEnPantalla,
+                "ERROR: El email mostrado en el perfil no es el correcto.");
     }
 
     @And("hace clic en cerrar sesion")
@@ -29,10 +31,9 @@ public class LogoutSteps {
 
     @Then("deberia regresar a la pantalla de login")
     public void deberiaRegresarALaPantallaDeLogin() {
-        // Esperamos un momento a que el diálogo desaparezca y cargue el login
+
         try { Thread.sleep(3000); } catch (InterruptedException e) {}
 
-        // Verificamos elementos típicos del Login (botón Ingresar o campo Email)
         boolean enLogin = !profilePage.getDriver()
                 .findElements(By.xpath("//*[@text='INGRESAR' or contains(@text, 'Login') or contains(@text, 'Email')]")).isEmpty();
 

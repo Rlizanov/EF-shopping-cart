@@ -8,7 +8,7 @@ import java.time.Duration;
 
 public class CatalogPage extends PageObject {
 
-    // --- TARGETS (Localizadores Únicos y Robustos) ---
+
 
     public static final Target TXT_SEARCH = Target.the("campo de búsqueda")
             .located(By.className("android.widget.EditText"));
@@ -52,7 +52,7 @@ public class CatalogPage extends PageObject {
     }
 
     public void esperarQueCargueElCatalogo() {
-        // 20 segundos de espera para emuladores lentos
+
         withTimeoutOf(Duration.ofSeconds(20))
                 .waitFor(By.xpath("//*[@text='Productos' or @text='Inicio']"));
     }

@@ -1,44 +1,38 @@
 package edu.pe.cibertec.pages;
 
 import net.serenitybdd.core.pages.PageObject;
-import net.serenitybdd.screenplay.targets.Target;
 import org.openqa.selenium.By;
+import java.time.Duration;
 
 public class ProfilePage extends PageObject {
 
-    public static final Target BTN_ABRIR_PERFIL = Target.the("icono de perfil barra inferior")
-            .located(By.xpath("//android.widget.TextView[@text='Perfil']"));
+    public static final By BTN_ABRIR_PERFIL = By.xpath("//android.widget.TextView[contains(@text,'Perfil')]");
+    public static final By LBL_MI_PERFIL = By.xpath("//android.widget.TextView[contains(@text,'Mi Perfil')]");
+    public static final By LBL_USER_EMAIL = By.xpath("//android.widget.TextView[contains(@text,'@')]");
 
-    public static final Target LBL_MI_PERFIL = Target.the("título Mi Perfil")
-            .located(By.xpath("//android.widget.TextView[@text='Mi Perfil']"));
+    // BOTONES DEL DIÁLOGO (Según tu XML)
+    public static final By BTN_LOGOUT_INICIAL = By.xpath("//android.view.View[@content-desc='Cerrar sesión']");
 
-    public static final Target LBL_USER_EMAIL = Target.the("email del usuario")
-            .located(By.xpath("//android.widget.TextView[@text='admin@test.com']"));
-
-    public static final Target BTN_LOGOUT_INICIAL = Target.the("botón logout perfil")
-            .located(By.xpath("//android.view.View[@content-desc='Cerrar sesión']"));
-
-    // SEGÚN TU XML DEL DIÁLOGO: El botón de confirmación
-    public static final Target BTN_CONFIRMAR_LOGOUT = Target.the("botón confirmar logout")
-            .located(By.xpath("//android.widget.TextView[@text='Sí, cerrar sesión']"));
+    // CORRECCIÓN: Apuntamos al View padre que es el que tiene el 'clickable=true'
+    public static final By BTN_CONFIRMAR_LOGOUT = By.xpath("//android.widget.TextView[@text='Sí, cerrar sesión']/parent::android.view.View");
 
     public void abrirMenu() {
-        $(BTN_ABRIR_PERFIL).waitUntilClickable().click();
+        $(BTN_ABRIR_PERFIL).withTimeoutOf(Duration.ofSeconds(15)).waitUntilClickable().click();
     }
 
     public void verificarPantallaPerfil() {
-        $(LBL_MI_PERFIL).waitUntilVisible();
+        $(LBL_MI_PERFIL).withTimeoutOf(Duration.ofSeconds(10)).waitUntilVisible();
     }
 
     public String obtenerEmailLogueado() {
-        return $(LBL_USER_EMAIL).waitUntilVisible().getText();
+        return $(LBL_USER_EMAIL).withTimeoutOf(Duration.ofSeconds(10)).waitUntilVisible().getText().trim();
     }
 
     public void ejecutarLogoutCompleto() {
-        // 1. Clic en el botón del perfil para abrir el diálogo
-        $(BTN_LOGOUT_INICIAL).waitUntilClickable().click();
+        // 1. Clic en la opción del menú
+        $(BTN_LOGOUT_INICIAL).withTimeoutOf(Duration.ofSeconds(10)).waitUntilClickable().click();
 
-        // 2. Clic en "Sí, cerrar sesión" en el cuadro de confirmación
-        $(BTN_CONFIRMAR_LOGOUT).waitUntilClickable().click();
+        // 2. Clic en el botón del diálogo (usando el nuevo XPath del padre clicable)
+        $(BTN_CONFIRMAR_LOGOUT).withTimeoutOf(Duration.ofSeconds(10)).waitUntilVisible().click();
     }
 }
